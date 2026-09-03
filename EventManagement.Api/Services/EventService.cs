@@ -13,7 +13,18 @@ public class EventService : IEventService
     {
         _context = context;
     }
-
+    private EventDto MapToDto(Event eventItem)
+    {
+        return new EventDto
+        {
+            Id = eventItem.Id,
+            Name = eventItem.Name,
+            Description = eventItem.Description,
+            StartDate = eventItem.StartDate,
+            EndDate = eventItem.EndDate,
+            Location = eventItem.Location
+        };
+    }
     public async Task<IEnumerable<EventDto>> GetEventsAsync()
     {
         return await _context.Events
@@ -37,15 +48,7 @@ public class EventService : IEventService
             return null;
         }
 
-        return new EventDto
-        {
-            Id = eventItem.Id,
-            Name = eventItem.Name,
-            Description = eventItem.Description,
-            StartDate = eventItem.StartDate,
-            EndDate = eventItem.EndDate,
-            Location = eventItem.Location
-        };
+        return MapToDto(eventItem);
     }
     public async Task<EventDto> CreateEventAsync(CreateEventDto dto)
     {
@@ -62,19 +65,9 @@ public class EventService : IEventService
 
         await _context.SaveChangesAsync();
 
-        return new EventDto
-        {
-            Id = eventItem.Id,
-            Name = eventItem.Name,
-            Description = eventItem.Description,
-            StartDate = eventItem.StartDate,
-            EndDate = eventItem.EndDate,
-            Location = eventItem.Location
-        };
+        return MapToDto(eventItem);
     }
-    public async Task<EventDto?> UpdateEventAsync(
-        Guid id,
-        UpdateEventDto dto)
+    public async Task<EventDto?> UpdateEventAsync(Guid id, UpdateEventDto dto)
     {
         var existingEvent = await _context.Events.FindAsync(id);
 
@@ -91,15 +84,7 @@ public class EventService : IEventService
 
         await _context.SaveChangesAsync();
 
-        return new EventDto
-        {
-            Id = existingEvent.Id,
-            Name = existingEvent.Name,
-            Description = existingEvent.Description,
-            StartDate = existingEvent.StartDate,
-            EndDate = existingEvent.EndDate,
-            Location = existingEvent.Location
-        };
+        return MapToDto(existingEvent);
     }
     public async Task<bool> DeleteEventAsync(Guid id)
     {
