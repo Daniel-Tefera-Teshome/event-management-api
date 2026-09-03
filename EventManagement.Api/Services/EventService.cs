@@ -13,7 +13,7 @@ public class EventService : IEventService
     {
         _context = context;
     }
-    private EventDto MapToDto(Event eventItem)
+    private static EventDto MapToDto(Event eventItem)
     {
         return new EventDto
         {
@@ -25,18 +25,21 @@ public class EventService : IEventService
             Location = eventItem.Location
         };
     }
+    private static Event MapToEntity(CreateEventDto dto)
+    {
+        return new Event
+        {
+            Name = dto.Name,
+            Description = dto.Description,
+            StartDate = dto.StartDate,
+            EndDate = dto.EndDate,
+            Location = dto.Location
+        };
+    }
     public async Task<IEnumerable<EventDto>> GetEventsAsync()
     {
         return await _context.Events
-            .Select(e => new EventDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Description,
-                StartDate = e.StartDate,
-                EndDate = e.EndDate,
-                Location = e.Location
-            })
+            .Select(e => MapToDto(e))
             .ToListAsync();
     }
     public async Task<EventDto?> GetEventAsync(Guid id)
@@ -52,14 +55,7 @@ public class EventService : IEventService
     }
     public async Task<EventDto> CreateEventAsync(CreateEventDto dto)
     {
-        var eventItem = new Event
-        {
-            Name = dto.Name,
-            Description = dto.Description,
-            StartDate = dto.StartDate,
-            EndDate = dto.EndDate,
-            Location = dto.Location
-        };
+        var eventItem = MapToEntity(dto);
 
         _context.Events.Add(eventItem);
 
