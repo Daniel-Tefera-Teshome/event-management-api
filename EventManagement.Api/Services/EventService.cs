@@ -31,8 +31,8 @@ public class EventService : IEventService
         {
             Name = dto.Name,
             Description = dto.Description,
-            StartDate = dto.StartDate,
-            EndDate = dto.EndDate,
+            StartDate = dto.StartDate.Value,
+            EndDate = dto.EndDate.Value,
             Location = dto.Location
         };
     }
@@ -55,11 +55,6 @@ public class EventService : IEventService
     }
     public async Task<EventDto> CreateEventAsync(CreateEventDto dto)
     {
-        if (dto.EndDate <= dto.StartDate)
-        {
-            throw new ArgumentException(
-                "End date must be after start date.");
-        }
         var eventItem = MapToEntity(dto);
 
         _context.Events.Add(eventItem);
@@ -70,12 +65,6 @@ public class EventService : IEventService
     }
     public async Task<EventDto?> UpdateEventAsync(Guid id, UpdateEventDto dto)
     {
-        if (dto.EndDate <= dto.StartDate)
-        {
-            throw new ArgumentException(
-                "End date must be after start date.");
-        }
-
         var existingEvent = await _context.Events.FindAsync(id);
 
         if (existingEvent == null)
