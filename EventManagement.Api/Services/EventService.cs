@@ -3,15 +3,20 @@ using EventManagement.Api.Models;
 using EventManagement.DTOs.Events;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace EventManagement.Api.Services;
 
 public class EventService : IEventService
 {
     private readonly EventDbContext _context;
+    private readonly ILogger<EventService> _logger;
 
-    public EventService(EventDbContext context)
+
+    public EventService(EventDbContext context,
+    ILogger<EventService> logger)
     {
         _context = context;
+        _logger = logger;
     }
     private static EventDto MapToDto(Event eventItem)
     {
@@ -55,11 +60,17 @@ public class EventService : IEventService
     }
     public async Task<EventDto> CreateEventAsync(CreateEventDto dto)
     {
+        _logger.LogInformation(
+      "Creating event with name: {EventName}",
+      dto.Name);
         var eventItem = MapToEntity(dto);
 
         _context.Events.Add(eventItem);
 
         await _context.SaveChangesAsync();
+        _logger.LogInformation(
+    "Event created successfully with ID: {EventId}",
+    eventItem.Id);
 
         return MapToDto(eventItem);
     }
