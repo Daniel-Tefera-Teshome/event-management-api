@@ -1,6 +1,7 @@
 using EventManagement.Api.Services;
 using EventManagement.DTOs.Events;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EventManagement.Api.Controllers;
 
@@ -37,6 +38,8 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
+    // [Authorize(Roles = "Admin")]
     public async Task<ActionResult<EventDto>> CreateEvent(
         CreateEventDto dto)
     {
