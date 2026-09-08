@@ -12,6 +12,7 @@ public class EventDbContext : DbContext
 
     public DbSet<Event> Events { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<UserSession> UserSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,5 +36,10 @@ public class EventDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50);
         });
+        modelBuilder.Entity<UserSession>()
+        .HasOne(s => s.User)
+        .WithMany(u => u.Sessions)
+        .HasForeignKey(s => s.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
     }
 }

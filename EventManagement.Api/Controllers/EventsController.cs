@@ -15,7 +15,7 @@ public class EventsController : ControllerBase
     {
         _eventService = eventService;
     }
-
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
     {
@@ -23,7 +23,7 @@ public class EventsController : ControllerBase
 
         return Ok(events);
     }
-
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<EventDto>> GetEvent(Guid id)
     {
@@ -38,8 +38,8 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
-    // [Authorize(Roles = "Admin")]
+    // [Authorize]
+    [Authorize(Roles = "User")]
     public async Task<ActionResult<EventDto>> CreateEvent(
         CreateEventDto dto)
     {
@@ -51,7 +51,7 @@ public class EventsController : ControllerBase
             result
         );
     }
-
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<EventDto>> UpdateEvent(
         Guid id,
@@ -66,7 +66,7 @@ public class EventsController : ControllerBase
 
         return Ok(result);
     }
-
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEvent(Guid id)
     {

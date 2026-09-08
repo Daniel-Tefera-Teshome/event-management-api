@@ -66,6 +66,7 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 // CORS
 builder.Services.AddCors(options =>
