@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using EventManagement.Api.Services;
-using EventManagement.DTOs.Auth;
+using EventManagement.Application.DTOs.Auth;
+using EventManagement.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +21,6 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponseDto>> Register(
         RegisterDto dto)
     {
-
         try
         {
             var result = await _authService.RegisterAsync(dto);
@@ -36,9 +35,10 @@ public class AuthController : ControllerBase
             });
         }
     }
+
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> Login(
-    LoginDto dto)
+        LoginDto dto)
     {
         try
         {
@@ -54,6 +54,7 @@ public class AuthController : ControllerBase
             });
         }
     }
+
     [HttpPost("refresh")]
     public async Task<ActionResult<AuthResponseDto>> Refresh(
         RefreshTokenDto dto)
@@ -74,9 +75,10 @@ public class AuthController : ControllerBase
             });
         }
     }
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(
-     RefreshTokenDto dto)
+        RefreshTokenDto dto)
     {
         await _authService.LogoutAsync(
             dto.RefreshToken);
@@ -86,6 +88,7 @@ public class AuthController : ControllerBase
             message = "Logged out successfully."
         });
     }
+
     [Authorize]
     [HttpPost("logout-all")]
     public async Task<IActionResult> LogoutAll()
@@ -101,5 +104,4 @@ public class AuthController : ControllerBase
             message = "All sessions have been logged out."
         });
     }
-
 }

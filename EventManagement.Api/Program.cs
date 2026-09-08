@@ -1,7 +1,6 @@
-using EventManagement.Api.Data;
-using EventManagement.Api.Services;
 using EventManagement.Api.Middleware;
-using Microsoft.EntityFrameworkCore;
+using EventManagement.Application;
+using EventManagement.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -32,10 +31,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers
 builder.Services.AddControllers();
 
-// Database
-builder.Services.AddDbContext<EventDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+// Application + Infrastructure
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -60,13 +58,6 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 builder.Services.AddProblemDetails();
-
-// Services
-builder.Services.AddScoped<IEventService, EventService>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 // CORS
 builder.Services.AddCors(options =>

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="EventManagement.Api/EventManagement.Api.csproj" />
+  <Project Path="EventManagement.Application/EventManagement.Application.csproj" />
+  <Project Path="EventManagement.Domain/EventManagement.Domain.csproj" />
+  <Project Path="EventManagement.Infrastructure/EventManagement.Infrastructure.csproj" />
+</Solution>
